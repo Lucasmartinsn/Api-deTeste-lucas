@@ -1,93 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/Lucasmartinsn/ApiProjeto-da-tropa/configs"
+	"github.com/Lucasmartinsn/ApiProjeto-da-tropa/handlers"
+	"github.com/go-chi/chi/v5"
 )
 
-/// Tabela com os typos e os campos da tabela
-type cadastro struct {
-	ID         		string  `json:"id"`
-	Foto 			string  `json:"foto"`
-	Nome_usuario  	string  `json:"nome_usuario"`
-	Email 			string	`json:"Email"`
-	Senha  			int 	`json:"Senha"`
-}
-
-//Tabela com os dados
-var cadastros = []cadastro{
-	{ID: "1", Foto: "1", Nome_usuario: "Lucas Martins", Email: "lucasnara@gmail", Senha: 12345},
-	{ID: "2", Foto: "1", Nome_usuario: "Maicon Kuster", Email: "maiconara@gmail", Senha: 54321},
-}
-
-//Rotas do CRUD
-func main() {
-	router := gin.Default()
-	router.GET("/cadastros", getcadastros)
-	router.GET("/cadastros/:id", getCadastroByID)
-	router.POST("/cadastros", postCadastro)
-	router.PUT("/cadastros/:id", updateCadastroById)
-	router.DELETE("/cadastos/:id", deleteCadastroById)
-
-	router.Run("localhost:8080")
-}
-
-
-// Função de GET
-func getcadastros(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, cadastros)
-}
-
-// 	Função de POST
-func postCadastro(c *gin.Context) {
-	var newCadastro cadastro
-
-	// Call BindJSON to bind the received JSON to
-	// newAlbum.
-	if err := c.BindJSON(&newCadastro); err != nil {
-		return
+func main(){
+	err := configs.Load()
+	if err != nil{
+		panic(err)
 	}
 
-	// Add the new album to the slice.
-	cadastros = append(cadastros, newCadastro)
-	c.IndentedJSON(http.StatusCreated, newCadastro)
-}
+	r := chi.NewRouter()
+	r.Post("/", handlers.Create)
+	r.Put("/{id}", handlers.Update)
+	r.Delete("/{id}", handlers.Delete)
+	r.Get("/", handlers.List)
+	r.Get("/{id}", handlers.Get)
 
-// Função de GET com base no ID
-func getCadastroByID(c *gin.Context) {
-	id := c.Param("id")
-
-	// Loop through the list of albums, looking for
-	// an album whose ID value matches the parameter.
-	for _, a := range cadastros {
-		if a.ID == id {
-			c.IndentedJSON(http.StatusOK, a)
-			return
-		}
-	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
-}
-
-// Função de PUT com base no ID
-func updateCadastroById(c *gin.Context) {
-	id := c.Param("id")
-	for i := range cadastros {
-		if cadastros[i].ID == id {
-			c.BindJSON(&cadastros[i])
-			c.IndentedJSON(http.StatusOK, cadastros[i])
-			return
-		}
-	}
-}
-
-// Função de DELETE com base no ID
-func deleteCadastroById(c *gin.Context) {
-	id := c.Param("id")
-	for i, a := range cadastros {
-		if a.ID == id {
-			cadastros = append(cadastros[:i], cadastros[i+1:]...)
-			return
-		}
-	}
+	http.ListenAndServe(fmt.Sprintf(":%s",configs.GetServerPort()), r)
 }
