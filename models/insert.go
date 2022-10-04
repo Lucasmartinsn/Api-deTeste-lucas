@@ -13,7 +13,7 @@ func Insert(cadastro Cadastro) ( id int, err error ){
 
 	defer conn.Close()
 
-	sql := `INSERT INTO todos (foto, nome_usuario, email, senha) VALUES ($1,$2,$3,$4) RETURNING id`
+	sql := `INSERT INTO cadastro (foto, nome_usuario, email, senha) VALUES ($1,$2,$3,$4) RETURNING id`
 	
 	err = conn.QueryRow(sql, cadastro.Foto, cadastro.Nome_usuario, cadastro.Email, cadastro).Scan(&id)
 	

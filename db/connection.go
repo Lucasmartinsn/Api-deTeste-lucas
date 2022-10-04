@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Lucasmartinsn/ApiProjeto-da-tropa/configs"
-	_"link do drive do banco"
+	_ "github.com/lib/pq"
 )
 
 func OpenConnection() (*sql.DB, error) {

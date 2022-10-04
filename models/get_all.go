@@ -11,7 +11,7 @@ func GetAll() (cadastros []Cadastro,err error){
 
 	defer conn.Close()
 
-	rows := conn.Query(`SELECT * FROM cadastro`)
+	rows, err := conn.Query(`SELECT * FROM cadastro`)
 	if err != nil{
 		return
 	}

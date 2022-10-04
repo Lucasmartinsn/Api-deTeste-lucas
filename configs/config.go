@@ -22,12 +22,12 @@ type DBConfig struct {
 }
 
 func init() {
-	viper.SetDefault("api.port", "8080")
+	viper.SetDefault("api.port", "9000")
 	viper.SetDefault("database.host", "localhost")
 	viper.SetDefault("database.port", "5432")
 }
 
-func Load () error{
+func Load() error{
 	viper.SetConfigName("config")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath(".")

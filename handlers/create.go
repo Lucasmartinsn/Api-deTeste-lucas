@@ -31,7 +31,7 @@ func Create(w http.ResponseWriter, r *http.Request){
 	}else {
 		resp = map[string]any{
 			"Error": false,
-			"menssage": fmt.Sprintf("scadastrado com sucesso! Id : %v ", id),
+			"menssage": fmt.Sprintf("cadastrado com sucesso! Id : %v ", id),
 		}
 	}
 	
