@@ -10,7 +10,7 @@ func Update(id int64, cadastro Cadastro) ( int64, error){
 
 	defer conn.Close()
 
-	response, err := conn.Exec(`UPDATE cadastro SET foto=$2, nome_usuario=$3, email=$4, senha=$5 WHERE id=$'1`,
+	response, err := conn.Exec(`UPDATE cadastro SET foto=$2, nome_usuario=$3, email=$4, senha=$5 WHERE id=$1`,
 	id, cadastro.Foto,cadastro.Nome_usuario, cadastro.Email, cadastro.Senha)
 
 	if err != nil {
